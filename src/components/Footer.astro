@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { url, nav } from '../lib/paths.js';
+import { site, telHref, mailtoHref } from '../lib/site.js';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-line bg-ink">
+  <div class="shell py-14">
+    <div class="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <a href={url()} class="inline-flex" aria-label={`${site.name} — home`}>
+          <Image
+            src={logo}
+            alt={`${site.name} logo`}
+            width={420}
+            densities={[1, 2]}
+            loading="lazy"
+            class="h-9 w-auto"
+          />
+        </a>
+        <p class="prose-muted mt-5 max-w-sm text-[0.9375rem]">
+          {site.description}
+        </p>
+        <a
+          href={site.instagram}
+          rel="me noopener noreferrer"
+          target="_blank"
+          class="mt-6 inline-flex items-center gap-2 rounded-md border border-line-strong px-3 py-2 text-sm text-cream transition-colors duration-200 hover:border-amber hover:bg-surface"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+          {site.instagramHandle} on Instagram
+        </a>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class="font-display text-sm tracking-[0.22em] text-muted">Site</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-[0.9375rem] text-cream transition-colors duration-200 hover:text-amber"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="font-display text-sm tracking-[0.22em] text-muted">Contact</h2>
+        <ul class="mt-4 space-y-2.5 text-[0.9375rem]">
+          <li>
+            {
+              telHref ? (
+                <a
+                  href={telHref}
+                  class="text-cream transition-colors duration-200 hover:text-amber"
+                >
+                  {site.phone}
+                </a>
+              ) : (
+                <span class="text-muted">{site.phone}</span>
+              )
+            }
+          </li>
+          <li>
+            {
+              mailtoHref ? (
+                <a
+                  href={mailtoHref}
+                  class="text-cream transition-colors duration-200 hover:text-amber"
+                >
+                  {site.email}
+                </a>
+              ) : (
+                <span class="text-muted">{site.email}</span>
+              )
+            }
+          </li>
+          <li class="text-muted">{site.serviceArea}</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="accent-rule mt-12 opacity-40" />
+
+    <div
+      class="mt-6 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>&copy; {year} {site.legalName}. All rights reserved.</p>
+      <p>Road Angel approved installer &middot; Vehicle tech, installed properly.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,311 @@
+/* ===========================================================================
+   Pro Mods — global styles
+   Tailwind v4: the design tokens below become real utilities, so `text-cream`,
+   `bg-surface`, `font-display` etc. all work in markup.
+   Fonts are self-hosted (no Google Fonts request) for speed and privacy.
+   =========================================================================== */
+@import 'tailwindcss';
+
+/* Inter, variable weight — body copy */
+@import '@fontsource-variable/inter/wght.css';
+
+/* Barlow Condensed — headings. Only the weights we actually use. */
+@import '@fontsource/barlow-condensed/latin-500.css';
+@import '@fontsource/barlow-condensed/latin-600.css';
+@import '@fontsource/barlow-condensed/latin-700.css';
+
+@theme {
+  /* ---- palette, pulled from the logo -------------------------------- */
+  --color-ink: #0b0b0d; /* page background, near-black */
+  --color-surface: #141417; /* cards, one step up from the page */
+  --color-surface-2: #1b1b20; /* hover state / nested panels */
+  --color-cream: #f5f5f7; /* primary text, 18:1 on ink */
+  --color-muted: #9a9aa3; /* secondary text, 7:1 on ink — passes AA */
+  --color-amber: #f59e0b; /* accent start */
+  --color-magenta: #d9268c; /* accent end — decorative only, see note */
+  --color-alert: #e11d2a; /* CTA red, matches the MODS block */
+
+  /* Hairline borders. Kept as a token so every edge matches. */
+  --color-line: rgb(245 245 247 / 0.09);
+  --color-line-strong: rgb(245 245 247 / 0.18);
+
+  /* ---- type -------------------------------------------------------- */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-sans:
+    'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ---- motion ------------------------------------------------------ */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ACCESSIBILITY NOTE
+   #D9268C on #0B0B0D is 4.3:1 and #E11D2A is 4.1:1 — both below the 4.5:1 AA
+   threshold for body-size text. So magenta and red are used for fills, rules
+   and glows only; red appears as a button *background* with white text (4.8:1).
+   Amber (9.2:1 on ink) is the accent colour that is safe to set as text. */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Sticky header height + breathing room, so #anchors don't hide behind it */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible focus for every interactive element, keyboard users included. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Firefox/Safari fallback where :focus-visible support lags on <details> */
+  summary:focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  ::selection {
+    background: var(--color-magenta);
+    color: #fff;
+  }
+
+  /* Native lightbox backdrop */
+  dialog::backdrop {
+    background: rgb(4 4 6 / 0.88);
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* ---- layout ------------------------------------------------------ */
+  .shell {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* ---- the amber -> magenta accent, in its various forms ----------- */
+  .accent-rule {
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--color-amber) 0%,
+      var(--color-magenta) 55%,
+      transparent 100%
+    );
+    border: 0;
+  }
+
+  .accent-tab {
+    display: block;
+    height: 3px;
+    width: 3.5rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-amber), var(--color-magenta));
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-amber);
+  }
+
+  /* ---- buttons ----------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.9375rem 1.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    transition:
+      transform 0.25s var(--ease-out-soft),
+      box-shadow 0.25s var(--ease-out-soft),
+      background-color 0.25s var(--ease-out-soft),
+      border-color 0.25s var(--ease-out-soft),
+      color 0.25s var(--ease-out-soft);
+  }
+
+  /* Primary: brand red with white text (4.8:1). The gradient shows up as the
+     hover glow rather than as a fill, which keeps the label readable. */
+  .btn-primary {
+    background-color: var(--color-alert);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background-color: #f22233;
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgb(245 158 11 / 0.5),
+      0 10px 30px -8px rgb(217 38 140 / 0.55),
+      0 6px 18px -6px rgb(245 158 11 / 0.4);
+  }
+
+  /* Secondary: outline that picks up the gradient on hover. */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-cream);
+    border-color: var(--color-line-strong);
+  }
+
+  .btn-ghost:hover {
+    color: #fff;
+    border-color: var(--color-amber);
+    background-image: linear-gradient(
+      90deg,
+      rgb(245 158 11 / 0.14),
+      rgb(217 38 140 / 0.14)
+    );
+    transform: translateY(-2px);
+  }
+
+  .btn-sm {
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  /* ---- cards ------------------------------------------------------- */
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+    transition:
+      transform 0.3s var(--ease-out-soft),
+      border-color 0.3s var(--ease-out-soft),
+      background-color 0.3s var(--ease-out-soft);
+  }
+
+  .card-link:hover {
+    background-color: var(--color-surface-2);
+    border-color: var(--color-line-strong);
+    transform: translateY(-3px);
+  }
+
+  /* ---- text helpers ----------------------------------------------- */
+  .prose-muted {
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  /* ---- skip link --------------------------------------------------- */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: top 0.2s var(--ease-out-soft);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+@layer utilities {
+  /* ---- fade-up-on-scroll -------------------------------------------
+     The hidden state is scoped to `.js` (added by an inline script in the
+     head) so the content is always visible if JavaScript never runs. */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-out-soft),
+      transform 0.7s var(--ease-out-soft);
+    will-change: opacity, transform;
+  }
+
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal,
+    .js .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Radial glow used behind the hero logo. */
+  .hero-glow::before {
+    content: '';
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 26rem;
+    background:
+      radial-gradient(
+        60% 60% at 30% 40%,
+        rgb(245 158 11 / 0.22) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        55% 55% at 70% 30%,
+        rgb(217 38 140 / 0.24) 0%,
+        transparent 70%
+      );
+    filter: blur(28px);
+    pointer-events: none;
+    z-index: 0;
+  }
+}

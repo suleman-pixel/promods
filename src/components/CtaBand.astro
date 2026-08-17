@@ -1,0 +1,62 @@
+---
+import { url } from '../lib/paths.js';
+import { site, telHref, mailtoHref } from '../lib/site.js';
+
+const {
+  title = 'Get a quote for your car',
+  body = 'Tell us the make, model and what you want fitting. We will come back with a straight answer on what is possible and what it costs.',
+} = Astro.props;
+---
+
+<section class="shell py-20 sm:py-24" aria-labelledby="cta-heading">
+  <div
+    class="reveal relative overflow-hidden rounded-2xl border border-line bg-surface px-6 py-12 sm:px-12 sm:py-16"
+  >
+    <!-- Decorative accent wash -->
+    <span
+      class="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full opacity-25 blur-3xl"
+      style="background: radial-gradient(circle, #D9268C 0%, transparent 70%)"
+      aria-hidden="true"></span>
+    <span
+      class="pointer-events-none absolute -bottom-24 -left-10 h-56 w-56 rounded-full opacity-20 blur-3xl"
+      style="background: radial-gradient(circle, #F59E0B 0%, transparent 70%)"
+      aria-hidden="true"></span>
+
+    <div class="relative max-w-2xl">
+      <p class="eyebrow">Next step</p>
+      <h2 id="cta-heading" class="mt-3 text-4xl font-semibold sm:text-5xl">
+        {title}
+      </h2>
+      <span class="accent-tab mt-5" aria-hidden="true"></span>
+      <p class="prose-muted mt-5 text-lg">{body}</p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a href={url('contact/')} class="btn btn-primary">Get a quote</a>
+        {
+          telHref ? (
+            <a href={telHref} class="btn btn-ghost">
+              Call {site.phone}
+            </a>
+          ) : (
+            <a href={url('contact/')} class="btn btn-ghost">
+              Call {site.phone}
+            </a>
+          )
+        }
+      </div>
+
+      <p class="mt-5 text-sm text-muted">
+        Prefer email?{' '}
+        {
+          mailtoHref ? (
+            <a href={mailtoHref} class="text-amber underline underline-offset-4">
+              {site.email}
+            </a>
+          ) : (
+            <span class="text-cream">{site.email}</span>
+          )
+        }
+      </p>
+    </div>
+  </div>
+</section>

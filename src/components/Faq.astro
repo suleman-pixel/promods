@@ -1,0 +1,41 @@
+---
+/**
+ * Accordion built on native <details>/<summary>: keyboard operable, screen
+ * reader friendly and fully functional with JavaScript disabled.
+ */
+import { faqs } from '../lib/site.js';
+---
+
+<div class="mt-10 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+  {
+    faqs.map((faq, i) => (
+      <details class="group reveal" data-reveal-delay={Math.min(i, 4) * 60} name="faq">
+        <summary
+          class="flex cursor-pointer list-none items-start justify-between gap-4 p-6 transition-colors duration-200 hover:bg-surface-2"
+        >
+          <h3 class="font-display text-xl font-semibold tracking-normal text-cream">
+            {faq.q}
+          </h3>
+          <span
+            class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-line-strong text-amber transition-transform duration-300 group-open:rotate-45"
+            aria-hidden="true"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="prose-muted max-w-2xl">{faq.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>

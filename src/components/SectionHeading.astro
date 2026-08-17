@@ -1,0 +1,30 @@
+---
+const {
+  eyebrow,
+  title,
+  lead,
+  /** Heading level — keeps the document outline correct per page. */
+  as: Tag = 'h2',
+  align = 'left',
+  id,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'reveal max-w-2xl',
+    align === 'center' && 'mx-auto text-center',
+  ]}
+>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag
+    id={id}
+    class="mt-3 text-4xl font-semibold text-cream sm:text-5xl"
+  >
+    {title}
+  </Tag>
+  <span
+    class:list={['accent-tab mt-5', align === 'center' && 'mx-auto']}
+    aria-hidden="true"></span>
+  {lead && <p class="prose-muted mt-5 text-lg">{lead}</p>}
+</div>

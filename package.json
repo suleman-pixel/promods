@@ -1,0 +1,32 @@
+{
+  "name": "promods-site",
+  "version": "1.0.0",
+  "description": "Static marketing site for Pro Mods — UK vehicle tech installation.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "assets": "node scripts/generate-placeholder-assets.mjs",
+    "assets:force": "node scripts/generate-placeholder-assets.mjs --force",
+    "favicons": "node scripts/generate-placeholder-assets.mjs --icons-only"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suleman-pixel/promods.git"
+  },
+  "bugs": {
+    "url": "https://github.com/suleman-pixel/promods/issues"
+  },
+  "homepage": "https://github.com/suleman-pixel/promods#readme",
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "private": true,
+  "type": "module"
+}

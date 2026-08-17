@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Faq from '../components/Faq.astro';
+import { site, telHref, mailtoHref, faqs } from '../lib/site.js';
+
+/** FAQ structured data, generated from the same source as the accordion. */
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+};
+
+const details = [
+  {
+    label: 'Phone',
+    value: site.phone,
+    href: telHref,
+    note: 'Call or text — if we are under a dashboard, leave a message.',
+  },
+  {
+    label: 'Email',
+    value: site.email,
+    href: mailtoHref,
+    note: 'Send the make, model and year for a compatibility check.',
+  },
+  {
+    label: 'Service area',
+    value: site.serviceArea,
+    href: '',
+    note: 'Mobile fitting, or bring the car to us.',
+  },
+  {
+    label: 'Opening hours',
+    value: site.openingHours,
+    href: '',
+    note: 'Evening and weekend slots by arrangement.',
+  },
+];
+---
+
+<BaseLayout
+  title="Contact — get a quote"
+  description="Get a quote for dash cam, Apple CarPlay or vehicle tracker installation. Send your vehicle make and model and we will confirm what is possible."
+  path="contact/"
+>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(faqJsonLd)}
+    is:inline
+  />
+
+  <section class="shell pt-16 pb-12 sm:pt-20">
+    <p class="eyebrow reveal">Contact</p>
+    <h1 class="reveal mt-3 max-w-3xl text-5xl font-semibold sm:text-6xl">
+      Get a quote
+    </h1>
+    <span class="accent-tab reveal mt-6" aria-hidden="true"></span>
+    <p class="reveal prose-muted mt-6 max-w-2xl text-lg">
+      Tell us the vehicle and the job. We will come back with what is possible,
+      what we would recommend, and what it costs — no obligation.
+    </p>
+  </section>
+
+  <section class="shell pb-8">
+    <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
+      <div>
+        <ContactForm />
+      </div>
+
+      <aside class="lg:pt-2" aria-labelledby="details-heading">
+        <h2 id="details-heading" class="text-2xl font-semibold">Direct details</h2>
+        <span class="accent-tab mt-4" aria-hidden="true"></span>
+
+        <dl class="mt-8 space-y-6">
+          {
+            details.map((detail) => (
+              <div class="reveal border-b border-line pb-6 last:border-b-0">
+                <dt class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+                  {detail.label}
+                </dt>
+                <dd class="mt-2">
+                  {detail.href ? (
+                    <a
+                      href={detail.href}
+                      class="font-display text-xl font-semibold text-cream transition-colors duration-200 hover:text-amber"
+                    >
+                      {detail.value}
+                    </a>
+                  ) : (
+                    <span class="font-display text-xl font-semibold text-cream">
+                      {detail.value}
+                    </span>
+                  )}
+                  <p class="mt-1 text-sm text-muted">{detail.note}</p>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <a
+          href={site.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 inline-flex items-center gap-2 text-[0.9375rem] text-amber underline underline-offset-4"
+        >
+          See recent work on Instagram ({site.instagramHandle})
+        </a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="shell py-20 sm:py-24" aria-labelledby="faq-heading">
+    <p class="eyebrow reveal">FAQ</p>
+    <h2 id="faq-heading" class="reveal mt-3 text-4xl font-semibold sm:text-5xl">
+      Questions we get asked
+    </h2>
+    <span class="accent-tab reveal mt-5" aria-hidden="true"></span>
+    <Faq />
+  </section>
+</BaseLayout>

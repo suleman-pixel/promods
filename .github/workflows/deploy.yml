@@ -1,0 +1,49 @@
+# Builds the site and publishes it to GitHub Pages on every push to main.
+#
+# One-time setup in the repository: Settings -> Pages -> Build and deployment
+# -> Source -> "GitHub Actions". Nothing else to configure.
+#
+# Action versions match the official Astro guide:
+# https://docs.astro.build/en/guides/deploy/github/
+name: Deploy to GitHub Pages
+
+on:
+  # Deploy whenever main is pushed. On a repo whose default branch is not
+  # `main` (e.g. `master`), change the branch name here to match.
+  push:
+    branches: [main]
+  # Lets you re-run a deploy by hand from the Actions tab.
+  workflow_dispatch:
+
+# Permissions the deploy needs: read the repo, publish a Pages artifact.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If you push twice quickly, let the newer deploy win rather than queueing.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v7
+      # Installs dependencies from package-lock.json, runs `npm run build`
+      # and uploads ./dist as the Pages artifact.
+      - name: Install, build, and upload your site output
+        uses: withastro/action@v6
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

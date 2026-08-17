@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { gallery } from '../lib/gallery.js';
+---
+
+<BaseLayout
+  title="Gallery — dash cam, CarPlay and tracker installs"
+  description="Examples of Pro Mods installation work: hardwired dash cams, Apple CarPlay retrofits, concealed trackers and the hidden cable routing behind them."
+  path="gallery/"
+>
+  <section class="shell pt-16 pb-12 sm:pt-20">
+    <p class="eyebrow reveal">Gallery</p>
+    <h1 class="reveal mt-3 max-w-3xl text-5xl font-semibold sm:text-6xl">
+      The work behind the trim
+    </h1>
+    <span class="accent-tab reveal mt-6" aria-hidden="true"></span>
+    <p class="reveal prose-muted mt-6 max-w-2xl text-lg">
+      Cameras, interfaces and trackers fitted so there is nothing on show when
+      the panels go back on. Select any image to enlarge it.
+    </p>
+  </section>
+
+  <section class="shell pb-8" aria-label="Installation photographs">
+    <GalleryGrid items={gallery} lightbox={true} />
+  </section>
+
+  <CtaBand
+    title="Want your car finished like this?"
+    body="Tell us what you are having fitted and we will quote for the job, including the tidy-up that does not show in photographs."
+  />
+</BaseLayout>

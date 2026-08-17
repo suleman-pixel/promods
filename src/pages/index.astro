@@ -1,0 +1,185 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import CtaBand from '../components/CtaBand.astro';
+import logo from '../assets/logo.png';
+import { url, absolute } from '../lib/paths.js';
+import { site, services, differentiators } from '../lib/site.js';
+import { teaser } from '../lib/gallery.js';
+
+/**
+ * LocalBusiness structured data.
+ *
+ * `AutoRepair` is schema.org's subtype of LocalBusiness for vehicle work — it
+ * inherits every LocalBusiness property and tells search engines what kind of
+ * business this is. Swap it for plain 'LocalBusiness' if you would rather be
+ * generic.
+ *
+ * Unknown details are left as [TODO: …] placeholders — replace them in
+ * src/lib/site.js and they update here too. Check the result afterwards at
+ * https://search.google.com/test/rich-results
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoRepair',
+  '@id': absolute('', Astro.site),
+  name: site.name,
+  alternateName: 'Pro Mods UK',
+  description: site.description,
+  url: absolute('', Astro.site),
+  image: absolute('og.png', Astro.site),
+  logo: absolute('og.png', Astro.site),
+  telephone: site.phone,
+  email: site.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    postalCode: site.address.postcode,
+    addressCountry: site.address.country,
+  },
+  areaServed: { '@type': 'AdministrativeArea', name: site.serviceArea },
+  openingHours: site.openingHours,
+  priceRange: '[TODO: PRICE RANGE, e.g. ££]',
+  sameAs: [site.instagram],
+  makesOffer: services.map((service) => ({
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: service.name,
+      description: service.summary,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="UK dash cam, Apple CarPlay & tracker installation"
+  description={`${site.tagline} ${site.description}`}
+  path=""
+>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(jsonLd)}
+    is:inline
+  />
+
+  <!-- ============================================================ hero -->
+  <section class="hero-glow relative overflow-hidden">
+    <div class="shell relative z-10 pt-16 pb-20 sm:pt-24 sm:pb-28">
+      <div class="max-w-3xl">
+        <!-- Logo, sitting on the accent glow -->
+        <div class="reveal relative inline-block">
+          <span
+            class="pointer-events-none absolute -inset-8 rounded-full opacity-70 blur-2xl"
+            style="background: radial-gradient(closest-side, rgba(217,38,140,.35), rgba(245,158,11,.28) 55%, transparent 75%)"
+            aria-hidden="true"></span>
+          <Image
+            src={logo}
+            alt={`${site.name} — vehicle tech installation`}
+            width={760}
+            densities={[1, 2]}
+            loading="eager"
+            fetchpriority="high"
+            class="relative h-20 w-auto sm:h-28"
+          />
+        </div>
+
+        <h1 class="reveal mt-10 text-5xl font-semibold sm:text-6xl lg:text-7xl" data-reveal-delay="60">
+          Vehicle tech,
+          <span class="block text-muted">installed properly.</span>
+        </h1>
+
+        <p class="reveal prose-muted mt-6 max-w-xl text-lg sm:text-xl" data-reveal-delay="120">
+          {site.tagline} Mobile and in-workshop fitting across {site.serviceArea},
+          with hidden wiring and no cut factory looms — a Road Angel approved
+          installer.
+        </p>
+
+        <div class="reveal mt-9 flex flex-col gap-3 sm:flex-row" data-reveal-delay="180">
+          <a href={url('contact/')} class="btn btn-primary">Get a quote</a>
+          <a href={url('services/')} class="btn btn-ghost">See what we fit</a>
+        </div>
+
+        <dl
+          class="reveal mt-14 grid max-w-xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3"
+          data-reveal-delay="240"
+        >
+          <div>
+            <dt class="text-xs uppercase tracking-[0.18em] text-muted">Approved</dt>
+            <dd class="font-display mt-1 text-xl font-semibold text-cream">Road Angel</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.18em] text-muted">Fitting</dt>
+            <dd class="font-display mt-1 text-xl font-semibold text-cream">Mobile or workshop</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.18em] text-muted">Wiring</dt>
+            <dd class="font-display mt-1 text-xl font-semibold text-cream">No cut looms</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    <hr class="accent-rule" />
+  </section>
+
+  <!-- ======================================================== services -->
+  <section class="shell py-20 sm:py-24" aria-labelledby="services-heading">
+    <SectionHeading
+      eyebrow="What we do"
+      title="Three things, done properly"
+      id="services-heading"
+      lead="Specialist installation work on modern vehicles — supplied, fitted and set up so it looks like it came from the factory."
+    />
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {services.map((service, i) => <ServiceCard service={service} delay={i * 90} />)}
+    </div>
+  </section>
+
+  <!-- ===================================================== why pro mods -->
+  <section class="border-y border-line bg-surface/40" aria-labelledby="why-heading">
+    <div class="shell py-20 sm:py-24">
+      <SectionHeading
+        eyebrow="Why Pro Mods"
+        title="The difference is in the tidy-up"
+        id="why-heading"
+        lead="Anyone can stick a camera to a windscreen. The job is what you cannot see afterwards."
+      />
+      <ul class="mt-12 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          differentiators.map((item, i) => (
+            <li class="card reveal p-6" data-reveal-delay={i * 80}>
+              <span class="accent-tab" aria-hidden="true" />
+              <h3 class="mt-5 text-xl font-semibold text-cream">{item.title}</h3>
+              <p class="prose-muted mt-2 text-[0.9375rem]">{item.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================================= gallery -->
+  <section class="shell py-20 sm:py-24" aria-labelledby="gallery-heading">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading
+        eyebrow="Recent work"
+        title="Installs, not adverts"
+        id="gallery-heading"
+        lead="A look at how the wiring is finished when the trim goes back on."
+      />
+      <a href={url('gallery/')} class="btn btn-ghost btn-sm reveal">View the gallery</a>
+    </div>
+    <div class="mt-12">
+      <GalleryGrid items={teaser} />
+    </div>
+  </section>
+
+  <!-- ============================================================= CTA -->
+  <CtaBand />
+</BaseLayout>
